@@ -1,28 +1,43 @@
-import logo from "./logo.svg";
+import { useState } from "react";
 import "./App.css";
+import PageWrapper from "./PageWrapper";
+import Paginacion from "./Paginacion";
+import Pelicula from "./Pelicula";
+import PeliculasJson from "./peliculas.json";
 
 function App() {
-  let nombre = "Johnnatan";
+  const [paginaActual, setPaginaActual] = useState(1);
 
+  let peliculas = PeliculasJson;
+  const TOTAL_POR_PAGINA = 5;
+
+  peliculas = peliculas.slice(
+    (paginaActual - 1) * TOTAL_POR_PAGINA,
+    paginaActual + TOTAL_POR_PAGINA
+  );
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Hola {nombre} <br />
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <PageWrapper>
+      {peliculas.map((pelicula) => (
+        <Pelicula
+          titulo={pelicula.titulo}
+          calificacion={pelicula.calificacion}
+          img={pelicula.img}
+          duracion={pelicula.duracion}
+          fecha={pelicula.fecha}
+          director={pelicula.director}
+          actores={pelicula.actores}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          {pelicula.descripcion}
+        </Pelicula>
+      ))}
+      <Paginacion
+        pagina={paginaActual}
+        total={4}
+        onChange={(pagina) => {
+          setPaginaActual(pagina);
+        }}
+      />
+    </PageWrapper>
   );
 }
-
 export default App;
